@@ -7,7 +7,9 @@ class Pyxel {
     }
 
     async fetchFiles(root, names) {
+        const syncfs = (populate) => new Promise((resolve) => FS.syncfs(populate, resolve));
         let FS = this.pyodide.FS;
+        FS.mkdir('/home/pyodide/custom');
         for (let name of names) {
             if (!name) {
                 continue;
@@ -22,10 +24,19 @@ class Pyxel {
                 }
                 path += '/';
             }
-            let fileResponse = await fetch(`${root}/${name}`);
+
+            FS.mount(FS.filesystems.IDBFS, { root: `${root}/assets` }, '/home/pyodide/custom');
+            FS.mkdir('/home/pyodide/custom/assets');
+
+            // await syncfs(true);
+            let fileResponse = await fetch(`${root}/assets/sample.pyxres`);
             let fileBinary = new Uint8Array(await fileResponse.arrayBuffer());
-            FS.writeFile(name, fileBinary, { encoding: 'binary' });
-            console.log(`Fetched ${root}${name}`);
+            this.pyodide.runPython("import os; print(os.listdir('/home/pyodide/custom/assets'))");
+            FS.writeFile('/home/pyodide/custom/assets/sample.pyxres', fileBinary, { encoding: 'binary' });
+            await syncfs(false);
+
+            this.pyodide.runPython("import os; print(os.listdir('/home/pyodide/custom/assets'))");
+            console.log(`Fetched ${root}/assets/sample.pyxres`);
         }
     }
 

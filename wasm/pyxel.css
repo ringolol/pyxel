@@ -1,42 +1,4 @@
-body {
-    color-scheme: light dark;
-    background-color: Canvas;
-    color: CanvasText;
-}
-
-@media (prefers-color-scheme: light) {
-    body {
-        background-color: #F7F9FE;
-        color: #202224;
-    }
-
-    a:link {
-        color: #0000E4;
-    }
-
-    a:visited {
-        color: #4E1E86;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #202124;
-        color: #FFFFFF;
-    }
-
-    a:link {
-        color: #CBADEC;
-    }
-
-    a:visited {
-        color: #9E9EF9;
-    }
-}
-
 canvas#canvas {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100vw;
+    width: 100%;
+    height: 100%;
 }

@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html style='width: 100%; height: 100%; border: 0px; margin: 0px; padding: 0px;'>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="../pyxel.js"></script>
 </head>
 
-<body>
+<body style='width: 100%; height: 100%; border: 0px; margin: 0px; padding: 0px; overflow: hidden;'>
     <div id="loading">Loading...</div>
-    <pyxel-edit root="../../python/pyxel/examples" name="assets/sample.pyxres"
-        onstart="document.getElementById('loading').remove()"></pyxel-edit>
+
+    <pyxel-edit style='width: 100%; height: 100%' root="../../python/pyxel/examples" name="custom/assets/sample.pyxres"
+        onstart="document.getElementById('loading').remove()">
+    </pyxel-edit>
 </body>
 
 </html>
