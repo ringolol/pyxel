@@ -171,8 +171,8 @@ impl Platform {
     pub fn move_cursor(&self, x: i32, y: i32) {
         let (window_x, window_y) = self.sdl_canvas.window().position();
         let (screen_x, screen_y, screen_scale) = self.screen_pos_scale();
-        let mouse_x = x * screen_scale as i32 + window_x + screen_x as i32;
-        let mouse_y = y * screen_scale as i32 + window_y + screen_y as i32;
+        let mouse_x = (x as f64 * screen_scale) as i32 + window_x + screen_x as i32;
+        let mouse_y = (y as f64 * screen_scale) as i32 + window_y + screen_y as i32;
         unsafe {
             sdl2::sys::SDL_WarpMouseGlobal(mouse_x, mouse_y);
         }
@@ -385,8 +385,8 @@ impl Platform {
         let dst = SdlRect::new(
             screen_x as i32,
             screen_y as i32,
-            width * screen_scale,
-            height * screen_scale,
+            (width as f64 * screen_scale) as u32,
+            (height as f64 * screen_scale) as u32,
         );
         self.sdl_canvas
             .copy(&self.sdl_texture, None, Some(dst))
@@ -454,14 +454,14 @@ impl Platform {
         exit(0);
     }
 
-    fn screen_pos_scale(&self) -> (u32, u32, u32) {
+    fn screen_pos_scale(&self) -> (u32, u32, f64) {
         let (window_width, window_height) = self.sdl_canvas.window().size();
-        let screen_scale = min(
-            window_width / self.screen_width,
-            window_height / self.screen_height,
+        let screen_scale = f64::min(
+            window_width as f64 / self.screen_width as f64,
+            window_height as f64 / self.screen_height as f64,
         );
-        let screen_x = (window_width - self.screen_width * screen_scale) / 2;
-        let screen_y = (window_height - self.screen_height * screen_scale) / 2;
+        let screen_x = (window_width - (self.screen_width as f64 * screen_scale) as u32) / 2;
+        let screen_y = (window_height - (self.screen_height as f64 * screen_scale) as u32) / 2;
         (screen_x, screen_y, screen_scale)
     }
 
@@ -476,8 +476,8 @@ impl Platform {
         unsafe {
             sdl2::sys::SDL_GetGlobalMouseState(&mut mouse_x, &mut mouse_y);
         }
-        mouse_x = (mouse_x - window_x - screen_x as i32) / screen_scale as i32;
-        mouse_y = (mouse_y - window_y - screen_y as i32) / screen_scale as i32;
+        mouse_x = ((mouse_x - window_x - screen_x as i32) as f64 / screen_scale) as i32;
+        mouse_y = ((mouse_y - window_y - screen_y as i32) as f64 / screen_scale) as i32;
         (mouse_x, mouse_y)
     }
 }
